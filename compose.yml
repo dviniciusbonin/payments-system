@@ -1,5 +1,7 @@
 services:
   npm:
+    profiles:
+     - dev
     image: node:22-alpine
     working_dir: /app
     volumes:
@@ -11,6 +13,8 @@ services:
       - db
 
   api-dev:
+    profiles:
+     - dev
     image: node:22-alpine
     working_dir: /app
     volumes:

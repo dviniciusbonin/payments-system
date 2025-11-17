@@ -1,6 +1,8 @@
 import { Controller, Get, HttpStatus, HttpException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('health')
 export class HealthController {
   constructor(private readonly prismaService: PrismaService) {}

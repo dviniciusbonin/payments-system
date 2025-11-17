@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger } from '@nestjs/common';
+import { ValidationPipe, Logger, BadRequestException } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
@@ -17,6 +17,12 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      exceptionFactory: (errors) => {
+        const messages = errors.map((error) =>
+          Object.values(error.constraints || {}).join(', '),
+        );
+        return new BadRequestException(messages.join('; '));
+      },
     }),
   );
 
@@ -24,6 +30,17 @@ async function bootstrap() {
     .setTitle('Payments System API')
     .setDescription('A RESTful API for a simplified payments system')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

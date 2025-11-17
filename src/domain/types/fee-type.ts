@@ -1,0 +1,4 @@
+export enum FeeType {
+  NATIONAL = 'NATIONAL',
+  INTERNATIONAL = 'INTERNATIONAL',
+}
